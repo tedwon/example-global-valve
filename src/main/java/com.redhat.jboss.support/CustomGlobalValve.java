@@ -21,7 +21,7 @@ public class CustomGlobalValve extends ValveBase {
     @Override
     public void invoke(Request request, Response response) throws IOException, ServletException {
         response.setBufferSize(Integer.parseInt(this.output));
-        LOGGER.info("res.setBufferSize(" + this.output + ");");
+        // LOGGER.info("res.setBufferSize(" + this.output + ");");
         getNext().invoke(request, response);
     }
 }
