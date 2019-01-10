@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<project name="CustomGlobalValve" default="jar" basedir=".">
+
+  <property file="${basedir}/build.properties" />
+
+  <property name="src.dir" value="${basedir}/src" />
+  <property name="main.dir" value="${src.dir}/main" />
+  <property name="java.dir" value="${main.dir}/java" />
+  <property name="target.dir" value="./target" />
+  <property name="classes.dir" value="${target.dir}/classes" />
+
+
+  <path id="build.classpath">
+    <pathelement path="${classes.dir}" />
+    <!-- the build classpath for EAP 6 environment -->
+    <fileset dir="${jboss.home}/modules" includes="**/*.jar"/>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${classes.dir}" />
+    <javac srcdir="${src.dir}"
+           destdir="${classes.dir}"
+           encoding="UTF-8"
+           debug="on"
+           optimize="off">
+      <classpath refid="build.classpath" />
+    </javac>
+  </target>
+
+  <target name="jar" depends="compile">
+    <jar jarfile="${target.dir}/${ant.project.name}.jar">
+      <fileset dir="${classes.dir}" />
+    </jar>
+  </target>
+
+  <target name="module" depends="jar">
+    <mkdir dir="${jboss.home}/modules/com/redhat/jboss/support/CustomGlobalValve/main" />
+    <copy file="${target.dir}/${ant.project.name}.jar" todir="${jboss.home}/modules/com/redhat/jboss/support/CustomGlobalValve/main" />
+    <copy file="${basedir}/example/module.xml" todir="${jboss.home}/modules/com/redhat/jboss/support/CustomGlobalValve/main" />
+  </target>
+
+  <target name="clean">
+    <delete dir="${target.dir}" />
+  </target>
+
+</project>
